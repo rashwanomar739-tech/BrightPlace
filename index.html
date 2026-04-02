@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrightPlace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap"
+    rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    /* ── RESET & BASE ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: 'Nunito', sans-serif;
+      background: #F5F0E8;
+      color: #3D3530;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #EDE7D9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #E3DBCA;
+      border-radius: 3px;
+    }
+
+    input::placeholder {
+      color: #B0A89E;
+    }
+
+    input {
+      color-scheme: light;
+    }
+
+    button {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(540deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        transform: translateY(8px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes toastIn {
+      from {
+        transform: translateX(-50%) translateY(-8px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .page {
+      animation: fadeUp 0.22s ease;
+    }
+
+    /* ── LAYOUT ── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    #header {
+      height: 56px;
+      flex-shrink: 0;
+      background: #EDE7D9;
+      border-bottom: 1px solid rgba(61, 53, 48, 0.15);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 0;
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-right: 24px;
+      flex-shrink: 0;
+    }
+
+    .logo-diamond {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      background: #B5714A;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wordmark-text {
+      font-size: 17px;
+      font-weight: 600;
+      font-family: 'Lora', serif;
+      line-height: 1;
+      color: #3D3530;
+      letter-spacing: -0.2px;
+    }
+
+    .wordmark-text span {
+      color: #B5714A;
+    }
+
+    .wordmark-sub {
+      font-size: 8px;
+      font-weight: 700;
+      color: #B0A89E;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    /* ── TOP NAV ── */
+    #top-nav {
+      display: flex;
+      align-items: stretch;
+      height: 100%;
+      flex: 1;
+      gap: 1px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 13px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #7A6E66;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .nav-btn:hover {
+      background: rgba(122, 158, 135, 0.12);
+      color: #7A9E87;
+    }
+
+    .nav-btn.active {
+      border-bottom-color: #B5714A;
+      color: #B5714A;
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: 8px;
+      right: 4px;
+      background: #B5714A;
+      color: #fff;
+      border-radius: 999px;
+      padding: 1px 5px;
+      font-size: 9px;
+      font-weight: 900;
+    }
+
+    /* ── HEADER RIGHT ── */
+    #header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .focus-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 8px;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      background: transparent;
+      color: #7A6E66;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      transition: all 0.15s;
+    }
+
+    .focus-btn.active {
+      color: #B5714A;
+    }
+
+    .coins-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(181, 113, 74, 0.10);
+      border: 1px solid rgba(181, 113, 74, 0.2);
+      font-size: 12px;
+      font-weight: 800;
+      color: #B5714A;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 10px 4px 4px;
+      border-radius: 999px;
+      background: #E3DBCA;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #7A9E87;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .user-info {
+      line-height: 1;
+    }
+
+    .user-level {
+      font-size: 11px;
+      font-weight: 800;
+      color: #3D3530;
+    }
+
+    .user-streak {
+      font-size: 9px;
+      color: #B0A89E;
+    }
+
+    /* ── BREADCRUMB ── */
+    #breadcrumb {
+      height: 33px;
+      flex-shrink: 0;
+      background: #F5F0E8;
+      border-bottom: 1px solid rgba(61, 53, 48, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+    }
+
+    .breadcrumb-path {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #B0A89E;
+    }
+
+    .breadcrumb-path .bc-home {
+      color: #B5714A;
+      font-weight: 700;
+    }
+
+    .breadcrumb-path .bc-page {
+      color: #7A6E66;
+      font-weight: 600;
+    }
+
+    .xp-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 176px;
+    }
+
+    .xp-level {
+      font-size: 11px;
+      font-weight: 800;
+      color: #B5714A;
+      white-space: nowrap;
+    }
+
+    .xp-track {
+      flex: 1;
+      height: 7px;
+      background: #E3DBCA;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #7A9E87;
+      transition: width 0.7s ease;
+    }
+
+    .xp-count {
+      font-size: 10px;
+      color: #B0A89E;
+      white-space: nowrap;
+    }
+
+    /* ── FOCUS BANNER ── */
+    #focus-banner {
+      padding: 7px 22px;
+      flex-shrink: 0;
+      background: rgba(181, 113, 74, 0.10);
+      border-bottom: 1px solid rgba(181, 113, 74, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #focus-banner .fb-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #B5714A;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #focus-banner .fb-msg {
+      font-size: 11px;
+      color: #C9936E;
+    }
+
+    /* ── BODY FLEX ── */
+    #body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    #sidebar {
+      width: 186px;
+      flex-shrink: 0;
+      background: #EDE7D9;
+      border-right: 1px solid rgba(61, 53, 48, 0.09);
+      display: flex;
+      flex-direction: column;
+      padding: 14px 8px;
+      overflow-y: auto;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #B0A89E;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    .sb-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #7A6E66;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: left;
+      width: 100%;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+
+    .sb-btn:hover {
+      background: rgba(122, 158, 135, 0.12);
+      color: #7A9E87;
+    }
+
+    .sb-btn.active {
+      background: rgba(122, 158, 135, 0.12);
+      color: #7A9E87;
+      border-left-color: #7A9E87;
+    }
+
+    .sb-courses {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(61, 53, 48, 0.09);
+    }
+
+    .sb-course {
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #7A6E66;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: color 0.15s;
+    }
+
+    .sb-course:hover {
+      color: #B5714A;
+    }
+
+    /* ── MAIN ── */
+    #main {
+      flex: 1;
+      padding: 24px 28px;
+      overflow-y: auto;
+      background: #F5F0E8;
+    }
+
+    /* ── FOOTER ── */
+    #footer {
+      height: 30px;
+      flex-shrink: 0;
+      background: #EDE7D9;
+      border-top: 1px solid rgba(61, 53, 48, 0.09);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      color: #B0A89E;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      font-size: 10px;
+      color: #B0A89E;
+      opacity: 0.55;
+    }
+
+    .footer-tagline {
+      margin-left: auto;
+      font-size: 10px;
+      color: #B0A89E;
+    }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      top: 64px;
+      left: 50%;
+      z-index: 9000;
+      background: #3D3530;
+      color: #F5F0E8;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(61, 53, 48, 0.18);
+      white-space: nowrap;
+      animation: toastIn 0.2s ease;
+      transform: translateX(-50%);
+      display: none;
+    }
+
+    /* ── CONFETTI ── */
+    #confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    /* ── CARD BASE ── */
+    .card {
+      border-radius: 14px;
+      padding: 16px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+    }
+
+    .card-surface2 {
+      background: #E3DBCA;
+    }
+
+    /* ── SECTION LABEL ── */
+    .sec-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #B0A89E;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    /* ── STAT GRID ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .stat-card {
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #B0A89E;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+
+    /* ── CLASS CARD ── */
+    .class-card {
+      border-radius: 14px;
+      padding: 16px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+      transition: border-color 0.3s;
+    }
+
+    .class-card.urgent {
+      border-color: #B5714A;
+      outline: 3px solid rgba(181, 113, 74, 0.10);
+    }
+
+    .class-icon-wrap {
+      padding: 8px;
+      border-radius: 10px;
+      background: rgba(122, 158, 135, 0.12);
+      flex-shrink: 0;
+    }
+
+    .class-name {
+      font-weight: 700;
+      color: #3D3530;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .class-sub {
+      font-size: 11px;
+      color: #7A6E66;
+      margin-top: 3px;
+    }
+
+    .class-countdown {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .class-countdown.urgent {
+      color: #B5714A;
+    }
+
+    .class-countdown.normal {
+      color: #7A9E87;
+    }
+
+    .class-countdown-label {
+      font-size: 10px;
+      color: #B0A89E;
+      margin-top: 2px;
+    }
+
+    .class-urgent-banner {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(181, 113, 74, 0.10);
+      border: 1px solid rgba(181, 113, 74, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #B5714A;
+    }
+
+    .launch-btn {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 7px;
+      border: none;
+      background: #B5714A;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 11px;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .class-footer {
+      margin-top: 10px;
+      font-size: 10px;
+      color: #B0A89E;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── QUEST CARD ── */
+    .quest-card {
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+      display: flex;
+      align-items: start;
+      gap: 12px;
+      transition: opacity 0.2s, background 0.2s;
+    }
+
+    .quest-card.done {
+      background: #E3DBCA;
+      opacity: 0.65;
+    }
+
+    .quest-check {
+      margin-top: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #B0A89E;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .quest-check.done {
+      border-color: #7A9E87;
+      background: #7A9E87;
+      cursor: default;
+    }
+
+    .quest-title {
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.35;
+      color: #3D3530;
+    }
+
+    .quest-title.done {
+      color: #B0A89E;
+      text-decoration: line-through;
+    }
+
+    .quest-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+
+    .quest-diff {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .quest-xp {
+      font-size: 10px;
+      color: #B0A89E;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .quest-deadline {
+      font-size: 10px;
+      color: #B0A89E;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .quest-delete {
+      background: transparent;
+      border: none;
+      color: #B0A89E;
+      cursor: pointer;
+      padding: 2px;
+      line-height: 0;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+
+    .quest-delete:hover {
+      color: #B5714A;
+    }
+
+    /* ── REWARD CARD ── */
+    .reward-card {
+      border-radius: 14px;
+      padding: 16px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      transition: all 0.2s;
+    }
+
+    .reward-card.locked {
+      background: #E3DBCA;
+      border-color: rgba(61, 53, 48, 0.09);
+      opacity: 0.55;
+    }
+
+    .reward-emoji {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .reward-name {
+      font-weight: 700;
+      color: #3D3530;
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .reward-cost {
+      color: #B5714A;
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .redeem-btn {
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: none;
+      background: #7A9E87;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 11px;
+      font-family: 'Nunito', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .redeem-btn:disabled {
+      background: #E3DBCA;
+      color: #B0A89E;
+      cursor: not-allowed;
+    }
+
+    .redeem-btn:not(:disabled):hover {
+      background: #A8C4B0;
+    }
+
+    /* ── RESOURCE CARD ── */
+    .resource-card {
+      border-radius: 14px;
+      padding: 16px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .resource-card:hover {
+      border-color: #A8C4B0;
+    }
+
+    .resource-emoji {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .resource-title {
+      font-weight: 700;
+      color: #3D3530;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .resource-desc {
+      font-size: 11px;
+      color: #7A6E66;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .resource-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(122, 158, 135, 0.12);
+      color: #7A9E87;
+      border: 1px solid rgba(122, 158, 135, 0.2);
+    }
+
+    /* ── PILL FILTER ── */
+    .pill-filter {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      background: #EDE7D9;
+      color: #7A6E66;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      transition: all 0.15s;
+    }
+
+    .pill-filter:hover {
+      color: #7A9E87;
+      border-color: #A8C4B0;
+    }
+
+    /* ── ADD QUEST FORM ── */
+    .form-input {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      background: #F5F0E8;
+      color: #3D3530;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+    }
+
+    .diff-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      background: transparent;
+      color: #7A6E66;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      transition: all 0.15s;
+    }
+
+    .diff-btn.selected {
+      border-color: #7A9E87;
+      background: rgba(122, 158, 135, 0.12);
+      color: #7A9E87;
+    }
+
+    .pri-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 10px;
+      border: none;
+      background: #7A9E87;
+      color: #fff;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+
+    .pri-btn:hover {
+      background: #A8C4B0;
+    }
+
+    .sec-btn {
+      padding: 9px 14px;
+      border-radius: 9px;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      background: transparent;
+      color: #7A6E66;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* ── TOOLKIT ROW ── */
+    .toolkit-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #F5F0E8;
+    }
+
+    .toolkit-emoji {
+      font-size: 17px;
+    }
+
+    .toolkit-label {
+      font-weight: 700;
+      color: #3D3530;
+      font-size: 13px;
+    }
+
+    .toolkit-note {
+      font-size: 11px;
+      color: #7A9E87;
+      margin-top: 1px;
+    }
+
+    /* ── TIPS GRID ── */
+    .tip-item {
+      background: #F5F0E8;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 12px;
+      color: #7A6E66;
+      font-weight: 600;
+      line-height: 1.5;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+    }
+
+    /* ── WELCOME CARD ── */
+    #welcome-card {
+      border-radius: 16px;
+      padding: 22px 24px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .welcome-greeting {
+      font-size: 20px;
+      font-weight: 600;
+      font-family: 'Lora', serif;
+      color: #3D3530;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .welcome-sub {
+      color: #7A6E66;
+      margin-top: 5px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .welcome-sub strong {
+      color: #B5714A;
+    }
+
+    .welcome-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .welcome-pill {
+      font-size: 11px;
+      font-weight: 700;
+      background: #E3DBCA;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+    }
+
+    /* ── ADHD TIP ── */
+    .adhd-tip {
+      border-radius: 14px;
+      padding: 16px 18px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.09);
+      display: flex;
+      align-items: start;
+      gap: 12px;
+    }
+
+    .adhd-tip-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      background: rgba(122, 158, 135, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .adhd-tip-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #7A9E87;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .adhd-tip-text {
+      font-size: 13px;
+      color: #7A6E66;
+      line-height: 1.65;
+    }
+
+    /* ── DOPAMINE BAR ── */
+    .dop-bar-track {
+      height: 8px;
+      background: #E3DBCA;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .dop-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #7A9E87;
+      transition: width 0.6s ease;
+    }
+
+    /* ── FLEX UTILS ── */
+    .flex {
+      display: flex;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .items-start {
+      align-items: start;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .gap-8 {
+      gap: 8px;
+    }
+
+    .gap-10 {
+      gap: 10px;
+    }
+
+    .gap-12 {
+      gap: 12px;
+    }
+
+    .gap-18 {
+      gap: 18px;
+    }
+
+    .gap-20 {
+      gap: 20px;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex-shrink-0 {
+      flex-shrink: 0;
+    }
+
+    /* ── GRID UTILS ── */
+    .grid-classes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+      gap: 10px;
+    }
+
+    .grid-classes-full {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 10px;
+    }
+
+    .grid-rewards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 10px;
+    }
+
+    .grid-resources {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
+      gap: 10px;
+    }
+
+    .grid-tips {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+      gap: 8px;
+    }
+
+    /* ── TABS ── */
+    .tab-page {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tab-page.active {
+      display: flex;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 26px;
+      color: #B0A89E;
+      background: #EDE7D9;
+      border-radius: 12px;
+      border: 1px dashed rgba(61, 53, 48, 0.15);
+      font-size: 13px;
+    }
+
+    /* ── SCHEDULE LEGEND PILLS ── */
+    .legend-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: #EDE7D9;
+      border: 1px solid rgba(61, 53, 48, 0.15);
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <!-- CONFETTI -->
+    <div id="confetti-layer"></div>
+
+    <!-- TOAST -->
+    <div id="toast">
+      <span id="toast-icon"></span>
+      <span id="toast-msg"></span>
+    </div>
+
+    <!-- HEADER -->
+    <header id="header">
+      <div class="wordmark">
+        <div class="logo-diamond">
+          <span id="logo-icon"></span>
+        </div>
+        <div>
+          <div class="wordmark-text"><span>Bright</span>Place</div>
+          <div class="wordmark-sub">not your average LMS</div>
+        </div>
+      </div>
+
+      <nav id="top-nav">
+        <button class="nav-btn active" data-tab="dashboard">
+          <span class="nav-icon" data-icon="layout-dashboard"></span>My Home
+        </button>
+        <button class="nav-btn" data-tab="quests">
+          <span class="nav-icon" data-icon="target"></span>Quests
+          <span class="nav-badge" id="quest-badge" style="display:none;"></span>
+        </button>
+        <button class="nav-btn" data-tab="schedule">
+          <span class="nav-icon" data-icon="calendar"></span>Schedule
+        </button>
+        <button class="nav-btn" data-tab="rewards">
+          <span class="nav-icon" data-icon="gift"></span>Rewards
+        </button>
+        <button class="nav-btn" data-tab="resources">
+          <span class="nav-icon" data-icon="book-open"></span>Content
+        </button>
+      </nav>
+
+      <div id="header-right">
+        <button class="focus-btn" id="focus-toggle">
+          <span id="focus-icon"></span>
+          <span id="focus-label">Focus</span>
+        </button>
+        <div class="coins-pill">
+          <span id="header-coin-icon"></span>
+          <span id="header-coins">120</span>
+        </div>
+        <div class="user-pill">
+          <div class="user-avatar">🧙</div>
+          <div class="user-info">
+            <div class="user-level" id="header-level">Lv.4</div>
+            <div class="user-streak" id="header-streak">5 day streak 🔥</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb">
+      <div class="breadcrumb-path">
+        <span class="bc-home">BrightPlace</span>
+        <span>›</span>
+        <span class="bc-page" id="bc-page">My Home</span>
+      </div>
+      <div class="xp-bar-wrap">
+        <span class="xp-level" id="xp-level">Lv.4</span>
+        <div class="xp-track">
+          <div class="xp-fill" id="xp-fill" style="width:68%"></div>
+        </div>
+        <span class="xp-count" id="xp-count">340/500</span>
+      </div>
+    </div>
+
+    <!-- FOCUS BANNER -->
+    <div id="focus-banner" style="display:none;">
+      <span class="fb-label"><span id="fb-icon"></span>Focus mode — extras hidden</span>
+      <span class="fb-msg">BrightPlace is rooting for you 🧡</span>
+    </div>
+
+    <!-- BODY -->
+    <div id="body">
+
+      <!-- SIDEBAR -->
+      <aside id="sidebar">
+        <div class="section-label">Course Tools</div>
+        <button class="sb-btn active" data-tab="dashboard"><span data-sb-icon="layout-dashboard"></span>My Home</button>
+        <button class="sb-btn" data-tab="quests"><span data-sb-icon="target"></span>Quest Board</button>
+        <button class="sb-btn" data-tab="schedule"><span data-sb-icon="calendar"></span>Schedule</button>
+        <button class="sb-btn" data-tab="rewards"><span data-sb-icon="gift"></span>Rewards</button>
+        <button class="sb-btn" data-tab="resources"><span data-sb-icon="book-open"></span>Content</button>
+        <button class="sb-btn" data-tab="dashboard"><span data-sb-icon="bar-chart-2"></span>Progress</button>
+        <button class="sb-btn" data-tab="dashboard"><span data-sb-icon="bell"></span>Alerts</button>
+        <button class="sb-btn" data-tab="resources"><span data-sb-icon="help-circle"></span>Support</button>
+
+        <div class="sb-courses">
+          <div class="section-label">My Courses</div>
+          <div class="sb-course">PSYC 101</div>
+          <div class="sb-course">CS 200</div>
+          <div class="sb-course">MATH 150</div>
+          <div class="sb-course">ENGL 102</div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main id="main">
+
+        <!-- DASHBOARD -->
+        <div class="tab-page active page" id="tab-dashboard" style="max-width:840px;">
+          <div id="welcome-card">
+            <div>
+              <h1 class="welcome-greeting" id="greet-text">Good morning, Scholar ✨</h1>
+              <p class="welcome-sub" id="quest-status">Welcome back to <strong>BrightPlace</strong> — you have 3 quests
+                waiting.</p>
+              <div class="welcome-pills">
+                <span class="welcome-pill" style="color:#B5714A;" id="streak-pill">5 day streak 🔥</span>
+                <span class="welcome-pill" style="color:#7A9E87;" id="done-pill">1 done</span>
+                <span class="welcome-pill" style="color:#7A6E66;" id="coins-pill-dash">120 coins</span>
+              </div>
+            </div>
+            <div style="font-size:44px;flex-shrink:0;opacity:0.8;">🧠</div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-value" style="color:#B5714A;" id="stat-active">3</div>
+              <div class="stat-label">Active quests</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color:#B5714A;" id="stat-coins">120</div>
+              <div class="stat-label">Bright Coins</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color:#7A9E87;">5</div>
+              <div class="stat-label">Day streak</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color:#7A9E87;" id="stat-done">1</div>
+              <div class="stat-label">Quests done</div>
+            </div>
+          </div>
+
+          <div id="today-classes-section">
+            <div class="sec-label">Today's classes</div>
+            <div class="grid-classes" id="today-classes"></div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between" style="margin-bottom:10px;">
+              <div class="sec-label" style="margin-bottom:0;">Active quests</div>
+              <button onclick="switchTab('quests')"
+                style="display:flex;align-items:center;gap:4px;background:transparent;border:none;color:#B5714A;cursor:pointer;font-weight:700;font-size:12px;font-family:'Nunito',sans-serif;">
+                See all <span id="see-all-icon"></span>
+              </button>
+            </div>
+            <div class="flex flex-col gap-8" id="dashboard-quests"></div>
+          </div>
+
+          <div class="adhd-tip" id="adhd-tip-section">
+            <div class="adhd-tip-icon"><span id="brain-icon"></span></div>
+            <div>
+              <div class="adhd-tip-label">ADHD tip</div>
+              <div class="adhd-tip-text">The hardest part is starting. Set a 2-minute timer and just <em>open</em> the
+                assignment — the rest usually follows on its own.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUESTS -->
+        <div class="tab-page page flex-col gap-18" id="tab-quests" style="max-width:660px;">
+          <div class="flex items-center justify-between flex-wrap gap-12">
+            <div>
+              <h1 style="font-size:20px;font-weight:600;font-family:'Lora',serif;color:#3D3530;margin:0;">Quest Board
+              </h1>
+              <p style="color:#B0A89E;font-size:12px;margin-top:3px;">Because "to-do list" doesn't spark joy</p>
+            </div>
+            <button class="pri-btn" id="new-quest-btn">
+              <span id="plus-icon"></span>New quest
+            </button>
+          </div>
+
+          <div id="add-quest-form" class="page"
+            style="border-radius:14px;padding:18px;background:#EDE7D9;border:1px solid rgba(61,53,48,0.15);display:none;">
+            <div style="font-weight:800;color:#3D3530;margin-bottom:14px;font-size:14px;">New quest</div>
+            <div class="flex flex-col gap-10">
+              <input class="form-input" id="quest-title-input"
+                placeholder="Name it (e.g. 'Vanquish the essay dragon')" />
+              <div class="flex gap-8 flex-wrap items-center">
+                <button class="diff-btn selected" data-diff="easy">Low effort</button>
+                <button class="diff-btn" data-diff="medium">Some effort</button>
+                <button class="diff-btn" data-diff="hard">Deep work</button>
+                <input class="form-input" id="quest-deadline-input" placeholder="Due date (optional)"
+                  style="width:auto;flex:1;min-width:130px;" />
+              </div>
+              <div class="flex gap-8">
+                <button class="pri-btn" id="add-quest-submit">Add quest</button>
+                <button class="sec-btn" id="add-quest-cancel">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sec-label" id="active-quests-label">Active · 3</div>
+            <div class="flex flex-col gap-8" id="active-quests-list"></div>
+          </div>
+          <div id="done-quests-section" style="display:none;">
+            <div class="sec-label" id="done-quests-label">Completed · 1</div>
+            <div class="flex flex-col gap-8" id="done-quests-list"></div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE -->
+        <div class="tab-page page flex-col gap-18" id="tab-schedule" style="max-width:800px;">
+          <div>
+            <h1 style="font-size:20px;font-weight:600;font-family:'Lora',serif;color:#3D3530;margin:0;">My Schedule</h1>
+            <p style="color:#B0A89E;font-size:12px;margin-top:3px;">30 min notice for in-person · 5 min for online —
+              time blindness, handled.</p>
+          </div>
+          <div class="flex gap-8 flex-wrap">
+            <div class="legend-pill" style="color:#7A9E87;"><span id="leg-map"></span>In-person</div>
+            <div class="legend-pill" style="color:#7A9E87;"><span id="leg-wifi"></span>Online</div>
+            <div class="legend-pill" style="color:#B5714A;"><span id="leg-alert"></span>Urgent</div>
+          </div>
+          <div class="grid-classes-full" id="all-classes"></div>
+          <div style="border-radius:14px;padding:18px;background:#EDE7D9;border:1px solid rgba(61,53,48,0.09);">
+            <div
+              style="font-weight:800;color:#3D3530;margin-bottom:12px;font-size:14px;display:flex;align-items:center;gap:7px;">
+              <span id="timer-toolkit-icon"></span>Time blindness toolkit
+            </div>
+            <div class="flex flex-col gap-8">
+              <div class="toolkit-row"><span class="toolkit-emoji">🚶</span>
+                <div>
+                  <div class="toolkit-label">Arts Building</div>
+                  <div class="toolkit-note">8 min walk from dorms</div>
+                </div>
+              </div>
+              <div class="toolkit-row"><span class="toolkit-emoji">🚌</span>
+                <div>
+                  <div class="toolkit-label">Science Hall</div>
+                  <div class="toolkit-note">14 min via Bus #12</div>
+                </div>
+              </div>
+              <div class="toolkit-row"><span class="toolkit-emoji">💻</span>
+                <div>
+                  <div class="toolkit-label">Online classes</div>
+                  <div class="toolkit-note">Open Zoom 5 min early</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REWARDS -->
+        <div class="tab-page page flex-col gap-18" id="tab-rewards" style="max-width:720px;">
+          <div class="flex items-start justify-between flex-wrap gap-12">
+            <div>
+              <h1 style="font-size:20px;font-weight:600;font-family:'Lora',serif;color:#3D3530;margin:0;">Reward Store
+              </h1>
+              <p style="color:#B0A89E;font-size:12px;margin-top:3px;">Spend what you've earned — dopamine loop, complete
+              </p>
+            </div>
+            <div
+              style="border-radius:12px;padding:11px 16px;background:#EDE7D9;border:1px solid rgba(61,53,48,0.15);display:flex;align-items:center;gap:8px;">
+              <span id="coins-big-icon"></span>
+              <div>
+                <div
+                  style="font-size:20px;font-weight:800;color:#B5714A;line-height:1;font-family:'Space Mono',monospace;"
+                  id="coins-display">120</div>
+                <div style="font-size:10px;color:#B0A89E;font-weight:700;">Bright Coins</div>
+              </div>
+            </div>
+          </div>
+          <div style="border-radius:14px;padding:16px 18px;background:#EDE7D9;border:1px solid rgba(61,53,48,0.09);">
+            <div style="font-weight:700;color:#3D3530;margin-bottom:6px;font-size:13px;">Complete 5 quests to unlock a
+              bonus multiplier</div>
+            <div class="dop-bar-track">
+              <div class="dop-bar-fill" id="dop-bar"></div>
+            </div>
+            <div style="font-size:11px;color:#7A9E87;font-weight:700;" id="dop-label">1/5 quests done</div>
+          </div>
+          <div class="grid-rewards" id="rewards-grid"></div>
+          <div
+            style="text-align:center;padding:13px;background:#EDE7D9;border-radius:12px;border:1px dashed rgba(61,53,48,0.15);font-size:12px;color:#B0A89E;">
+            The best rewards are personal — write your own and spend coins to unlock them
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="tab-page page flex-col gap-18" id="tab-resources" style="max-width:820px;">
+          <div>
+            <h1 style="font-size:20px;font-weight:600;font-family:'Lora',serif;color:#3D3530;margin:0;">Content Library
+            </h1>
+            <p style="color:#B0A89E;font-size:12px;margin-top:3px;">Curated for ADHD brains — no wall of text, we
+              promise</p>
+          </div>
+          <div class="flex gap-8 flex-wrap">
+            <button class="pill-filter">All</button>
+            <button class="pill-filter">Study Tips</button>
+            <button class="pill-filter">Focus Music</button>
+            <button class="pill-filter">Campus Guide</button>
+          </div>
+          <div class="grid-resources" id="resources-grid"></div>
+          <div style="border-radius:16px;padding:18px;background:#EDE7D9;border:1px solid rgba(61,53,48,0.09);">
+            <div
+              style="font-weight:800;color:#3D3530;margin-bottom:14px;font-size:14px;display:flex;align-items:center;gap:7px;">
+              <span id="lightbulb-icon"></span>Quick ADHD wins
+            </div>
+            <div class="grid-tips" id="tips-grid"></div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <span class="footer-copy">© 2025 BrightPlace · Built for ADHD minds</span>
+      <span class="footer-note">Not affiliated with D2L · Just inspired by the chaos</span>
+      <span class="footer-tagline">Focus. Quest. Thrive.</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // ── STATE ──────────────────────────────────────────────────
+    let state = {
+      xp: 340, coins: 120, level: 4, streak: 5,
+      activeTab: 'dashboard',
+      focusMode: false,
+      showAddQuest: false,
+      selectedDiff: 'easy',
+      quests: [
+        { id: 1, title: 'Complete PSYC 101 reading (Ch. 7)', difficulty: 'medium', xp: 50, deadline: 'Today 11pm', done: false },
+        { id: 2, title: 'Submit lab report draft', difficulty: 'hard', xp: 80, deadline: 'Tomorrow', done: false },
+        { id: 3, title: 'Watch lecture recording (Week 8)', difficulty: 'easy', xp: 25, deadline: 'This week', done: false },
+        { id: 4, title: 'Email Prof. about office hours', difficulty: 'easy', xp: 20, deadline: '', done: true },
+      ]
+    };
+
+    const classes = [
+      { id: 1, name: 'PSYC 101 – Intro to Psychology', type: 'in-person', location: 'Arts Building, Rm 204', time: '10:30', day: 'Mon / Wed / Fri' },
+      { id: 2, name: 'CS 200 – Data Structures', type: 'online', location: '', time: '13:00', day: 'Tue / Thu' },
+      { id: 3, name: 'MATH 150 – Calculus II', type: 'in-person', location: 'Science Hall, Rm 118', time: '15:30', day: 'Mon / Wed' },
+      { id: 4, name: 'ENGL 102 – Critical Writing', type: 'online', location: '', time: '09:00', day: 'Friday' },
+    ];
+
+    const rewards = [
+      { id: 1, name: '1 hour gaming', emoji: '🎮', cost: 100 },
+      { id: 2, name: 'Netflix episode', emoji: '📺', cost: 60 },
+      { id: 3, name: 'Favourite snack', emoji: '🍕', cost: 40 },
+      { id: 4, name: '30 min social media', emoji: '📱', cost: 30 },
+      { id: 5, name: 'Guilt-free nap', emoji: '😴', cost: 50 },
+      { id: 6, name: 'Café treat', emoji: '☕', cost: 80 },
+    ];
+
+    const resources = [
+      { id: 1, title: 'Pomodoro for ADHD Brains', emoji: '🍅', category: 'Study Tips', desc: 'A modified 15/5 method that works with hyperfocus, not against it.' },
+      { id: 2, title: 'Lo-Fi Study Playlist', emoji: '🎵', category: 'Focus Music', desc: 'Two hours, no lyrics — keeps dopamine steady without distraction.' },
+      { id: 3, title: 'Campus Quick Routes', emoji: '🗺️', category: 'Campus Guide', desc: 'Fastest walking paths between buildings so you\'re never late again.' },
+      { id: 4, title: 'Body Doubling Sessions', emoji: '👥', category: 'Study Tips', desc: 'Virtual co-working rooms open 24/7 for quiet accountability.' },
+      { id: 5, title: 'Binaural Beats for Focus', emoji: '🧠', category: 'Focus Music', desc: '40 Hz gamma waves — research-backed for attention support.' },
+      { id: 6, title: 'Accessibility Services Guide', emoji: '🏛️', category: 'Campus Guide', desc: 'How to register and get academic accommodations on campus.' },
+    ];
+
+    const tips = [
+      '📱 Phone in another room while studying',
+      '🎧 Noise-cancelling headphones = focus zone',
+      '🍅 Set a 15-min timer — just start',
+      '🏃 5-min walk when your brain stalls',
+      '✍️ Write tasks on paper first, then here',
+      '🌡️ A slightly cool room helps focus',
+    ];
+
+    const navLabels = { dashboard: 'My Home', quests: 'Quests', schedule: 'Schedule', rewards: 'Rewards', resources: 'Content' };
+    const diffLabel = { easy: 'Low effort', medium: 'Some effort', hard: 'Deep work' };
+    const diffColor = { easy: '#7A9E87', medium: '#B5714A', hard: '#3D3530' };
+
+    // ── LUCIDE ICONS ───────────────────────────────────────────
+    function icon(name, size = 14, color = 'currentColor') {
+      const el = document.createElement('span');
+      el.style.display = 'inline-flex'; el.style.alignItems = 'center'; el.style.lineHeight = '0';
+      const svg = lucide.createElement(lucide[toCamelCase(name)]);
+      svg.setAttribute('width', size); svg.setAttribute('height', size);
+      svg.setAttribute('stroke', color); svg.setAttribute('stroke-width', '2');
+      svg.setAttribute('fill', 'none'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+      el.appendChild(svg);
+      return el;
+    }
+
+    function toCamelCase(str) {
+      return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
+    }
+
+    function setIcon(el, name, size = 14, color = 'currentColor') {
+      if (!el) return;
+      el.innerHTML = '';
+      el.appendChild(icon(name, size, color));
+    }
+
+    // ── INIT STATIC ICONS ──────────────────────────────────────
+    function initIcons() {
+      setIcon(document.getElementById('logo-icon'), 'lightbulb', 13, '#fff');
+      setIcon(document.getElementById('see-all-icon'), 'chevron-right', 13);
+      setIcon(document.getElementById('brain-icon'), 'brain', 16, '#7A9E87');
+      setIcon(document.getElementById('plus-icon'), 'plus', 14);
+      setIcon(document.getElementById('coins-big-icon'), 'coins', 18, '#B5714A');
+      setIcon(document.getElementById('lightbulb-icon'), 'lightbulb', 14, '#7A9E87');
+      setIcon(document.getElementById('timer-toolkit-icon'), 'timer', 14, '#7A9E87');
+      setIcon(document.getElementById('header-coin-icon'), 'coins', 12, '#B5714A');
+      setIcon(document.getElementById('leg-map'), 'map-pin', 11);
+      setIcon(document.getElementById('leg-wifi'), 'wifi', 11);
+      setIcon(document.getElementById('leg-alert'), 'alert-circle', 11, '#B5714A');
+
+      // Nav icons
+      document.querySelectorAll('.nav-icon').forEach(el => {
+        setIcon(el, el.dataset.icon, 14);
+      });
+      // Sidebar icons
+      document.querySelectorAll('[data-sb-icon]').forEach(el => {
+        setIcon(el, el.dataset.sbIcon, 13);
+      });
+      updateFocusIcon();
+    }
+
+    // ── GREETING ──────────────────────────────────────────────
+    function greet() {
+      const h = new Date().getHours();
+      if (h < 12) return 'Good morning';
+      if (h < 17) return 'Good afternoon';
+      return 'Good evening';
+    }
+
+    // ── COUNTDOWN ─────────────────────────────────────────────
+    function getCountdown(timeStr) {
+      const now = new Date();
+      const [h, m] = timeStr.split(':').map(Number);
+      const target = new Date(); target.setHours(h, m, 0, 0);
+      if (target < now) target.setDate(target.getDate() + 1);
+      const diff = Math.max(0, Math.floor((target - now) / 1000));
+      const hh = Math.floor(diff / 3600), mm = Math.floor((diff % 3600) / 60), ss = diff % 60;
+      if (hh > 0) return `${hh}h ${mm}m`;
+      if (mm > 0) return `${mm}m ${ss}s`;
+      return `${ss}s`;
+    }
+
+    function getMinsLeft(timeStr) {
+      const now = new Date();
+      const [h, m] = timeStr.split(':').map(Number);
+      const target = new Date(); target.setHours(h, m, 0, 0);
+      return Math.max(0, Math.floor((target - now) / 60000));
+    }
+
+    // ── RENDER CLASS CARD ──────────────────────────────────────
+    function renderClassCard(cls) {
+      const isOnline = cls.type === 'online';
+      const reminderOffset = isOnline ? 5 : 30;
+      const minsLeft = getMinsLeft(cls.time);
+      const urgent = minsLeft <= reminderOffset;
+
+      const div = document.createElement('div');
+      div.className = 'class-card' + (urgent ? ' urgent' : '');
+      div.dataset.classId = cls.id;
+
+      const topRow = document.createElement('div');
+      topRow.style.cssText = 'display:flex;align-items:start;justify-content:space-between;gap:12px;';
+
+      const left = document.createElement('div');
+      left.style.cssText = 'display:flex;align-items:center;gap:10px;';
+      const iconWrap = document.createElement('div');
+      iconWrap.className = 'class-icon-wrap';
+      iconWrap.appendChild(icon(isOnline ? 'wifi' : 'map-pin', 15, '#7A9E87'));
+      const info = document.createElement('div');
+      info.innerHTML = `<div class="class-name">${cls.name}</div><div class="class-sub">${isOnline ? 'Online class' : cls.location}</div>`;
+      left.appendChild(iconWrap); left.appendChild(info);
+
+      const right = document.createElement('div');
+      right.style.textAlign = 'right';
+      const countdown = document.createElement('div');
+      countdown.className = 'class-countdown ' + (urgent ? 'urgent' : 'normal');
+      countdown.dataset.time = cls.time;
+      countdown.textContent = getCountdown(cls.time);
+      const cLabel = document.createElement('div');
+      cLabel.className = 'class-countdown-label';
+      cLabel.textContent = isOnline ? 'log on in' : 'leave in';
+      right.appendChild(countdown); right.appendChild(cLabel);
+
+      topRow.appendChild(left); topRow.appendChild(right);
+      div.appendChild(topRow);
+
+      if (urgent) {
+        const banner = document.createElement('div');
+        banner.className = 'class-urgent-banner';
+        const alertI = icon('alert-circle', 12);
+        banner.appendChild(alertI);
+        const msg = document.createTextNode(isOnline ? `Open Zoom in ~${reminderOffset} min` : `Leave now — ~${reminderOffset} min travel`);
+        banner.appendChild(msg);
+        if (isOnline) {
+          const lBtn = document.createElement('button');
+          lBtn.className = 'launch-btn';
+          lBtn.appendChild(icon('play', 9));
+          lBtn.appendChild(document.createTextNode('Launch'));
+          banner.appendChild(lBtn);
+        }
+        div.appendChild(banner);
+      }
+
+      const footer = document.createElement('div');
+      footer.className = 'class-footer';
+      footer.appendChild(icon('calendar', 10));
+      footer.appendChild(document.createTextNode(` ${cls.day} · ${cls.time}`));
+      div.appendChild(footer);
+
+      return div;
+    }
+
+    // ── RENDER QUEST CARD ──────────────────────────────────────
+    function renderQuestCard(quest) {
+      const div = document.createElement('div');
+      div.className = 'quest-card' + (quest.done ? ' done' : '');
+      div.dataset.questId = quest.id;
+
+      // Check button
+      const checkBtn = document.createElement('button');
+      checkBtn.className = 'quest-check' + (quest.done ? ' done' : '');
+      if (quest.done) {
+        checkBtn.appendChild(icon('check', 10, '#fff'));
+      }
+      if (!quest.done) {
+        checkBtn.addEventListener('click', () => completeQuest(quest.id));
+      }
+
+      // Content
+      const content = document.createElement('div');
+      content.style.cssText = 'flex:1;min-width:0;';
+      const title = document.createElement('div');
+      title.className = 'quest-title' + (quest.done ? ' done' : '');
+      title.textContent = quest.title;
+      const meta = document.createElement('div');
+      meta.className = 'quest-meta';
+
+      const diffSpan = document.createElement('span');
+      diffSpan.className = 'quest-diff';
+      diffSpan.style.color = diffColor[quest.difficulty];
+      diffSpan.textContent = diffLabel[quest.difficulty];
+
+      const xpSpan = document.createElement('span');
+      xpSpan.className = 'quest-xp';
+      xpSpan.appendChild(icon('coins', 9));
+      xpSpan.appendChild(document.createTextNode(`${quest.xp} XP`));
+
+      meta.appendChild(diffSpan); meta.appendChild(xpSpan);
+
+      if (quest.deadline) {
+        const dl = document.createElement('span');
+        dl.className = 'quest-deadline';
+        dl.appendChild(icon('timer', 9));
+        dl.appendChild(document.createTextNode(quest.deadline));
+        meta.appendChild(dl);
+      }
+
+      content.appendChild(title); content.appendChild(meta);
+
+      // Delete
+      const delBtn = document.createElement('button');
+      delBtn.className = 'quest-delete';
+      delBtn.appendChild(icon('trash-2', 13));
+      delBtn.addEventListener('click', () => deleteQuest(quest.id));
+
+      div.appendChild(checkBtn); div.appendChild(content); div.appendChild(delBtn);
+      return div;
+    }
+
+    // ── RENDER REWARD CARD ─────────────────────────────────────
+    function renderRewardCard(reward) {
+      const canAfford = state.coins >= reward.cost;
+      const div = document.createElement('div');
+      div.className = 'reward-card' + (canAfford ? '' : ' locked');
+
+      div.innerHTML = `
+    <div class="reward-emoji">${reward.emoji}</div>
+    <div class="reward-name">${reward.name}</div>
+    <div class="flex items-center justify-between">
+      <span class="reward-cost"><span class="coin-icon-inline"></span>${reward.cost}</span>
+      <button class="redeem-btn" ${canAfford ? '' : 'disabled'}>${canAfford ? 'Redeem' : 'Locked'}</button>
+    </div>`;
+
+      div.querySelector('.coin-icon-inline').appendChild(icon('coins', 10, '#B5714A'));
+      if (canAfford) {
+        div.querySelector('.redeem-btn').addEventListener('click', () => buyReward(reward));
+      }
+      return div;
+    }
+
+    // ── RENDER RESOURCE CARD ───────────────────────────────────
+    function renderResourceCard(item) {
+      const div = document.createElement('div');
+      div.className = 'resource-card';
+      div.innerHTML = `
+    <div class="resource-emoji">${item.emoji}</div>
+    <div class="resource-title">${item.title}</div>
+    <div class="resource-desc">${item.desc}</div>
+    <span class="resource-tag">${item.category}</span>`;
+      return div;
+    }
+
+    // ── CONFETTI ───────────────────────────────────────────────
+    function triggerConfetti() {
+      const layer = document.getElementById('confetti-layer');
+      layer.innerHTML = '';
+      const colors = ['#7A9E87', '#A8C4B0', '#B5714A', '#C9936E', '#D4C5A9', '#C4B99A'];
+      for (let i = 0; i < 36; i++) {
+        const p = document.createElement('div');
+        p.style.cssText = `
+      position:absolute;
+      left:${Math.random() * 100}%;top:-10px;
+      width:${6 + Math.random() * 8}px;height:${6 + Math.random() * 8}px;
+      background-color:${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      animation:confettiFall ${1.4 + Math.random()}s ease-in forwards;
+      animation-delay:${Math.random() * 0.5}s;`;
+        layer.appendChild(p);
+      }
+      setTimeout(() => { layer.innerHTML = ''; }, 2400);
+    }
+
+    // ── TOAST ──────────────────────────────────────────────────
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      const icon_el = document.getElementById('toast-icon');
+      icon_el.innerHTML = '';
+      icon_el.appendChild(icon('check-circle-2', 14, '#7A9E87'));
+      document.getElementById('toast-msg').textContent = msg;
+      t.style.display = 'flex';
+      t.style.animation = 'none'; t.offsetHeight; t.style.animation = '';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    // ── ACTIONS ───────────────────────────────────────────────
+    function completeQuest(id) {
+      const q = state.quests.find(q => q.id === id);
+      if (!q || q.done) return;
+      q.done = true;
+      state.xp += q.xp;
+      state.coins += Math.floor(q.xp / 2);
+      triggerConfetti();
+      showToast(`Quest done! +${q.xp} XP · +${Math.floor(q.xp / 2)} coins`);
+      render();
+    }
+
+    function deleteQuest(id) {
+      state.quests = state.quests.filter(q => q.id !== id);
+      render();
+    }
+
+    function addQuest() {
+      const title = document.getElementById('quest-title-input').value.trim();
+      if (!title) return;
+      const xpMap = { easy: 20, medium: 50, hard: 80 };
+      const deadline = document.getElementById('quest-deadline-input').value;
+      state.quests.push({
+        id: Date.now(), title, difficulty: state.selectedDiff,
+        xp: xpMap[state.selectedDiff], deadline, done: false
+      });
+      document.getElementById('quest-title-input').value = '';
+      document.getElementById('quest-deadline-input').value = '';
+      state.selectedDiff = 'easy';
+      state.showAddQuest = false;
+      showToast('Quest added to your board');
+      render();
+    }
+
+    function buyReward(reward) {
+      if (state.coins < reward.cost) return;
+      state.coins -= reward.cost;
+      showToast(`"${reward.name}" unlocked — you earned it ${reward.emoji}`);
+      render();
+    }
+
+    // ── TAB SWITCH ─────────────────────────────────────────────
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      render();
+    }
+
+    // ── RENDER ─────────────────────────────────────────────────
+    function render() {
+      const active = state.quests.filter(q => !q.done);
+      const done = state.quests.filter(q => q.done);
+      const maxXp = state.level * 100 + 100;
+      const xpPct = Math.min((state.xp / maxXp) * 100, 100);
+
+      // Header
+      document.getElementById('header-coins').textContent = state.coins;
+      document.getElementById('header-level').textContent = `Lv.${state.level}`;
+      document.getElementById('header-streak').textContent = `${state.streak} day streak 🔥`;
+
+      // XP bar
+      document.getElementById('xp-level').textContent = `Lv.${state.level}`;
+      document.getElementById('xp-fill').style.width = xpPct + '%';
+      document.getElementById('xp-count').textContent = `${state.xp}/${maxXp}`;
+
+      // Breadcrumb page label
+      document.getElementById('bc-page').textContent = navLabels[state.activeTab];
+
+      // Nav active state
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
+      });
+      document.querySelectorAll('.sb-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === state.activeTab &&
+          ['My Home', 'Quest Board', 'Schedule', 'Rewards', 'Content'].includes(btn.textContent.trim().split('\n')[0].trim());
+        btn.classList.toggle('active', btn.dataset.tab === state.activeTab &&
+          ['dashboard', 'quests', 'schedule', 'rewards', 'resources'].indexOf(state.activeTab) >= 0 &&
+          btn.querySelector('[data-sb-icon]')?.dataset.sbIcon === {
+            dashboard: 'layout-dashboard', quests: 'target', schedule: 'calendar', rewards: 'gift', resources: 'book-open'
+          }[state.activeTab]);
+      });
+
+      // Quest badge
+      const badge = document.getElementById('quest-badge');
+      if (active.length > 0) { badge.style.display = ''; badge.textContent = active.length; }
+      else { badge.style.display = 'none'; }
+
+      // Focus mode
+      const focusBanner = document.getElementById('focus-banner');
+      const sidebar = document.getElementById('sidebar');
+      const breadcrumb = document.getElementById('breadcrumb');
+      const footer = document.getElementById('footer');
+      focusBanner.style.display = state.focusMode ? 'flex' : 'none';
+      breadcrumb.style.display = state.focusMode ? 'none' : '';
+      sidebar.style.display = state.focusMode ? 'none' : '';
+      footer.style.display = state.focusMode ? 'none' : '';
+      document.getElementById('today-classes-section').style.display = state.focusMode ? 'none' : '';
+      document.getElementById('adhd-tip-section').style.display = state.focusMode ? 'none' : '';
+      const focusBtn = document.getElementById('focus-toggle');
+      focusBtn.classList.toggle('active', state.focusMode);
+      document.getElementById('focus-label').textContent = state.focusMode ? 'Exit Focus' : 'Focus';
+      updateFocusIcon();
+
+      // Tab pages
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+      const activePage = document.getElementById('tab-' + state.activeTab);
+      if (activePage) activePage.classList.add('active');
+
+      // ── DASHBOARD ──
+      document.getElementById('greet-text').textContent = `${greet()}, Scholar ✨`;
+      document.getElementById('quest-status').innerHTML = `Welcome back to <strong style="color:#B5714A">BrightPlace</strong> — ${active.length > 0 ? `you have ${active.length} quest${active.length > 1 ? 's' : ''} waiting.` : 'your board is clear. Add something new.'}`;
+      document.getElementById('streak-pill').textContent = `${state.streak} day streak 🔥`;
+      document.getElementById('done-pill').textContent = `${done.length} done`;
+      document.getElementById('coins-pill-dash').textContent = `${state.coins} coins`;
+      document.getElementById('stat-active').textContent = active.length;
+      document.getElementById('stat-coins').textContent = state.coins;
+      document.getElementById('stat-done').textContent = done.length;
+
+      // Today classes (first 2)
+      const todayCls = document.getElementById('today-classes');
+      todayCls.innerHTML = '';
+      classes.slice(0, 2).forEach(cls => todayCls.appendChild(renderClassCard(cls)));
+
+      // Dashboard quests (first 3 active)
+      const dqList = document.getElementById('dashboard-quests');
+      dqList.innerHTML = '';
+      if (active.length === 0) {
+        dqList.innerHTML = '<div class="empty-state">All clear — add a quest from the Quest Board</div>';
+      } else {
+        active.slice(0, 3).forEach(q => dqList.appendChild(renderQuestCard(q)));
+      }
+
+      // ── QUESTS ──
+      document.getElementById('add-quest-form').style.display = state.showAddQuest ? '' : 'none';
+      document.getElementById('active-quests-label').textContent = `Active · ${active.length}`;
+      const aList = document.getElementById('active-quests-list');
+      aList.innerHTML = '';
+      if (active.length === 0) {
+        aList.innerHTML = '<div class="empty-state">All quests complete — add another one</div>';
+      } else {
+        active.forEach(q => aList.appendChild(renderQuestCard(q)));
+      }
+      const doneSection = document.getElementById('done-quests-section');
+      if (done.length > 0) {
+        doneSection.style.display = '';
+        document.getElementById('done-quests-label').textContent = `Completed · ${done.length}`;
+        const dList = document.getElementById('done-quests-list');
+        dList.innerHTML = '';
+        done.forEach(q => dList.appendChild(renderQuestCard(q)));
+      } else {
+        doneSection.style.display = 'none';
+      }
+
+      // Diff buttons
+      document.querySelectorAll('.diff-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.diff === state.selectedDiff);
+      });
+
+      // ── SCHEDULE ──
+      const allCls = document.getElementById('all-classes');
+      allCls.innerHTML = '';
+      classes.forEach(cls => allCls.appendChild(renderClassCard(cls)));
+
+      // ── REWARDS ──
+      document.getElementById('coins-display').textContent = state.coins;
+      const dopPct = Math.min((done.length / 5) * 100, 100);
+      document.getElementById('dop-bar').style.width = dopPct + '%';
+      document.getElementById('dop-label').textContent = `${done.length}/5 quests done${done.length >= 5 ? ' · Multiplier active!' : ''}`;
+      const rGrid = document.getElementById('rewards-grid');
+      rGrid.innerHTML = '';
+      rewards.forEach(r => rGrid.appendChild(renderRewardCard(r)));
+
+      // ── RESOURCES ──
+      const resGrid = document.getElementById('resources-grid');
+      resGrid.innerHTML = '';
+      resources.forEach(r => resGrid.appendChild(renderResourceCard(r)));
+
+      const tipsGrid = document.getElementById('tips-grid');
+      tipsGrid.innerHTML = '';
+      tips.forEach(tip => {
+        const d = document.createElement('div');
+        d.className = 'tip-item';
+        d.textContent = tip;
+        tipsGrid.appendChild(d);
+      });
+    }
+
+    function updateFocusIcon() {
+      const fi = document.getElementById('focus-icon');
+      if (!fi) return;
+      fi.innerHTML = '';
+      fi.appendChild(icon(state.focusMode ? 'eye-off' : 'eye', 12));
+    }
+
+    // ── INIT SIDEBAR ACTIVE ────────────────────────────────────
+    function updateSidebarActive() {
+      const iconMap = { dashboard: 'layout-dashboard', quests: 'target', schedule: 'calendar', rewards: 'gift', resources: 'book-open' };
+      document.querySelectorAll('.sb-btn').forEach(btn => {
+        const sbIcon = btn.querySelector('[data-sb-icon]');
+        if (!sbIcon) return;
+        const matches = sbIcon.dataset.sbIcon === iconMap[state.activeTab];
+        btn.classList.toggle('active', matches);
+      });
+    }
+
+    // ── COUNTDOWN TICKER ──────────────────────────────────────
+    function tickCountdowns() {
+      document.querySelectorAll('.class-countdown[data-time]').forEach(el => {
+        el.textContent = getCountdown(el.dataset.time);
+      });
+    }
+
+    // ── EVENT LISTENERS ────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      initIcons();
+      render();
+      setInterval(tickCountdowns, 1000);
+
+      // Tab nav
+      document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; updateSidebarActive(); render(); });
+      });
+      document.querySelectorAll('.sb-btn[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; updateSidebarActive(); render(); });
+      });
+
+      // Focus toggle
+      document.getElementById('focus-toggle').addEventListener('click', () => {
+        state.focusMode = !state.focusMode; render();
+      });
+
+      // Add quest toggle
+      document.getElementById('new-quest-btn').addEventListener('click', () => {
+        state.showAddQuest = !state.showAddQuest; render();
+      });
+
+      document.getElementById('add-quest-submit').addEventListener('click', addQuest);
+      document.getElementById('add-quest-cancel').addEventListener('click', () => {
+        state.showAddQuest = false; render();
+      });
+
+      document.getElementById('quest-title-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') addQuest();
+      });
+
+      // Diff buttons (event delegation)
+      document.addEventListener('click', e => {
+        if (e.target.classList.contains('diff-btn')) {
+          state.selectedDiff = e.target.dataset.diff;
+          document.querySelectorAll('.diff-btn').forEach(b => b.classList.toggle('selected', b.dataset.diff === state.selectedDiff));
+        }
+      });
+
+      // FB icon
+      const fbI = document.getElementById('fb-icon');
+      if (fbI) { fbI.innerHTML = ''; fbI.appendChild(icon('eye', 13)); }
+    });
+  </script>
+</body>
+
+</html>
